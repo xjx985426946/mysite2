@@ -2,7 +2,7 @@ from tornado import web,ioloop,httpserver
 
 class MainPageHandler(web.RequestHandler):
     def get(self, **arg, **kwargs):
-        self.render("index.html")
+        self.render("/html/index.html")
 
 application = web.Application([
             (r"/", MainPageHandler),
