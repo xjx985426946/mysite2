@@ -1,4 +1,4 @@
-from mysite2.Configure.Mysql import MySqlConnection
+from Configure.Mysql import MySqlConnection
 
 def register():
     name = input('请输入用户名：')
