@@ -1,66 +1,63 @@
 import pymysql
+import hashlib
 
 class MySqlConnection(object):
 
     def __init__(self):
-        self.get_conn()
+        self.host = '120.27.0.81'
+        self.user = 'work'
+        self.password = 'Work:2019'
+        self.database = 'auto_test'
 
     # 数据库配置
-    def get_conn(self):
+    def connect(self):
         try:
             self.conn = pymysql.connect(
-                host='120.27.0.81',     # IP地址
-                user='work',            # 用户名
-                passwd='Work:2019',     # 密码
-                database='auto_test'    # 数据库
+                host=self.host,     # IP地址
+                user=self.user,            # 用户名
+                passwd=self.password,     # 密码
+                database=self.database    # 数据库
             )
             self.cursor = self.conn.cursor(pymysql.cursors.DictCursor)
-
         except:
-            # logger.error("connectDatabase failed")
             print("连接失败")
             return False
 
     # 查询一条数据
-    def fetchone(self, sql, params=None):
+    def select_one(self, sql, params=None):
         '''
         根据sql和参数获取一行数据
         :param sql: sql语句
         :param params: sql语句对象的参数元组，默认值为None
         :return: 查询的一行数据
         '''
-        data_one = None
-
+        result = None
         try:
-            count = self.cursor.execute(sql, params)
-            if count != 0:
-                data_one = self.cursor.fetchone()
+            self.connect()
+            self.cursor.execute(sql, params)
+            result = self.cursor.fetchone()
+            self.close()
         except Exception as ex:
             print(ex)
-        finally:
-            self.close()
-        return data_one
+        return result
 
     # 查询多条数据
-    def fetchall(self, sql, params=None):
+    def select_all(self, sql, params=None):
         '''
         根据sql和参数获取一行数据
         :param sql: sql语句
         :param params: sql语句对象的参数列表，默认值为None
         :return: 查询的一行数据
         '''
-
-        data_all = None
-
+        result = None
         try:
-            count = self.cursor.execute(sql, params)
-            if count != 0:
-                data_all = self.cursor.fetchall()
+            self.connect()
+            self.cursor.execute(sql, params)
+            result = self.cursor.fetchone()
+            self.close()
         except Exception as ex:
             print(ex)
-        finally:
-            self.close()
-        return data_all
+        return result
 
     def __item(self, sql, params=None):
         '''
@@ -71,12 +68,12 @@ class MySqlConnection(object):
         '''
         count = 0
         try:
+            self.connect()
             count = self.cursor.execute(sql, params)
             self.conn.commit()
+            self.close()
         except Exception as ex:
             print(ex)
-        finally:
-            self.close()
         return count
 
     def update(self, sql, params=None):
@@ -106,11 +103,16 @@ class MySqlConnection(object):
         '''
         return self.__item(sql, params)
 
+    def my_md5(self, pwd):
+        my_md5 = hashlib.md5()
+        my_md5.update(pwd.encode('utf-8'))
+        return my_md5.hexdigest()
+
     def close(self):
         self.cursor.close()
         self.conn.close()
 
 if __name__ == '__main__':
-    sql = 'select * from test_user;'
-    data = MySqlConnection().fetchall(sql)
+    sql = 'select * from autotest_user;'
+    data = MySqlConnection().select_one(sql)
     print(data)
