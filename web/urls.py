@@ -32,7 +32,6 @@ def login():
 
     else:
         print('登录成功')
-    # return render_template('login.html')
 
 @app.route('/login_in', methods=['POST'])
 def login_in():

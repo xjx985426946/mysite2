@@ -6,10 +6,13 @@ import time
 
 server = flask.Flask(__name__)
 
-@server.route('/index', methods=['get'])
+@server.route('/')
+@server.route('/index')
 def index():
-    res = {'msg': 'this is first api', 'msg_code': 0}
-    return json.dumps(res, ensure_ascii=False)
+    # res = {'msg': 'this is first api', 'msg_code': 0}
+    # return json.dumps(res, ensure_ascii=False)
+    user = {'username': 'auto_test'}
+    return render_template('login.html', title='自动化测试平台', user=user)
 
 @server.route('/login', methods=['POST'])
 def login():
@@ -66,4 +69,4 @@ def register():
 
 
 if __name__ == '__main__':
-    server.run(port=6666, debug=True)
+    server.run(port=6668, debug=True)
