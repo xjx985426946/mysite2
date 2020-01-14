@@ -6,7 +6,7 @@ def register():
 
     helper = MySqlConnection()
 
-    ins = helper.insert('insert into autotest_user(user_name, password) values(%s,%s)', [name, password])
+    ins = helper.insert('insert into test_user(user_name, password) values(%s,%s)', [name, password])
     if ins:
         print('注册成功！')
     else:
@@ -17,7 +17,7 @@ def login():
     password = input('请输入密码：')
 
     helper = MySqlConnection()
-    ins = helper.select_one('select * from autotest_user where user_name=%s and password=%s', [name, password])
+    ins = helper.select_one('select * from test_user where user_name=%s and password=%s', [name, password])
 
     if ins:
         print('登录成功')
