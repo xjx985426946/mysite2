@@ -113,6 +113,6 @@ class MySqlConnection(object):
         self.conn.close()
 
 if __name__ == '__main__':
-    sql = 'select * from autotest_user;'
+    sql = 'select * from test_user where user_name=\'test\' and password=\'123\';'
     data = MySqlConnection().select_one(sql)
     print(data)

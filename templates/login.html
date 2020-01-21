@@ -50,6 +50,9 @@
           line-height: 10px;
           color:#fff
         }
+        .btn{
+            background-color:#00a7d0
+        }
       </style>
 
   </head>
@@ -60,15 +63,15 @@
                   <h3 class="text-center">欢迎登录</h3>
                   <div class="form-group">
                     <label for="id_username">用户名：</label>
-                    <input type="text" name='user_name' class="form-control" id="id_username" placeholder="Username" autofocus required>
+                    <input type="text" name='user_name' class="form-control" id="id_username" placeholder="Username" >
                   </div>
                   <div class="form-group">
                     <label for="id_password">密码：</label>
-                    <input type="password" name='password' class="form-control" id="id_password" placeholder="Password" required>
+                    <input type="password" name='password' class="form-control" id="id_password" placeholder="Password" >
                   </div>
                 <div>
                   <a href="/register/" class="text-success "><ins>新用户注册</ins></a>
-                  <button type="submit" class="btn btn-primary float-right" id="login">登录</button>
+                  <a type="text" class="btn btn-primary float-right" id="login">登录</a>
                 </div>
               </form>
             </div>
@@ -77,6 +80,7 @@
     <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
     <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+
     $("#login").click(function(){
         var data = {}
         let formData = new FormData(form);
@@ -85,13 +89,27 @@
         data = {user_name,password}
 
         $.ajax({
-            type: 'post',
-            url: 'http://127.0.0.1:6668/login',
+            type: 'POST',
+            url: 'http://127.0.0.1:8000/login',
             dataType: 'json',
             data: JSON.stringify(data),
+            async:false,
+            contentType: 'application/json; charset=UTF-8',
             success: function(data) {
-                console.log(data)
-                alert("POST:"+JSON.stringify(data));
+                if (data.code == '200'){
+                    console.log(data.return_info);
+                    alert(data.return_info);
+                    window.location.href('index.html')
+                }
+                else if (data.code == '400'){
+                    console.log(data.return_info);
+                    alert(data.return_info);
+                }
+                else if (data.code == '5001'){
+                    console.log(data.return_info);
+                    alert(data.return_info);
+                }
+
             },
             error: function(xhr, type) {
                 console.log(data)
