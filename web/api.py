@@ -8,13 +8,13 @@ from flask_cors import *
 server = flask.Flask(__name__)
 CORS(server, resources=r'/*')
 
-@server.route('/')
-@server.route('/index')
-def index():
-    # res = {'msg': 'this is first api', 'msg_code': 0}
-    # return json.dumps(res, ensure_ascii=False)
-    user = {'username': 'auto_test'}
-    return render_template('login.html', title='自动化测试平台', user=user)
+# @server.route('/')
+# @server.route('/index')
+# def index():
+#     # res = {'msg': 'this is first api', 'msg_code': 0}
+#     # return json.dumps(res, ensure_ascii=False)
+#     user = {'username': 'auto_test'}
+#     return render_template('login.html', title='自动化测试平台', user=user)
 
 @server.route('/login', methods=['POST'])
 def login():
@@ -27,22 +27,27 @@ def login():
     if name == '' or pwd == '':
         return_dirt['code'] = '5001'
         return_dirt['return_info'] = '登录失败，请输入用户名或密码！'
-        res = make_response(return_dirt)
+        print(return_dirt)
+        res = make_response(json.dumps(return_dirt))
         return res
 
     else:
-        print(return_dirt)
         helper = MySqlConnection()
-        ins = helper.insert('select * from test_user where user_name=%s and password=%s', [name, pwd])
+        ins = helper.select_one('select * from test_user where user_name=%s and password=%s;', [name, pwd])
+        print(ins)
         if ins:
             return_dirt['return_info'] = '登录成功！'
             return_dirt['results'] = 'True'
             return_dirt['code'] = '200'
-            return make_response(return_dirt)
+            print(return_dirt)
+            res = make_response(json.dumps(return_dirt))
+            return res
         else:
             return_dirt['return_info'] = '登录失败！请输入正确的用户名和密码'
             return_dirt['code'] = '400'
-            return make_response(return_dirt)
+            print(return_dirt)
+            res = make_response(json.dumps(return_dirt))
+            return res
 
 
 @server.route('/register', methods=['POST'])
